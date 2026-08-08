@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Macho DUI Menu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: transparent; /* Game shows through transparent background */
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Menu Container Dimensions & Layout */
+        .macho-container {
+            width: 650px;
+            height: 420px;
+            background: rgba(12, 12, 18, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        /* Banner Header */
+        .macho-header {
+            height: 60px;
+            background: linear-gradient(135deg, #e63946 0%, #a8201a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        /* Menu Content Area */
+        .macho-body {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .macho-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .macho-button:hover {
+            background: rgba(230, 57, 70, 0.3);
+            border-color: rgba(230, 57, 70, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="macho-container">
+        <div class="macho-header">
+            <span id="title">MACHO MENU</span>
+            <span style="font-size: 12px; opacity: 0.6;">v1.0</span>
+        </div>
+        <div class="macho-body" id="content">
+            <div class="macho-button">Self Options</div>
+            <div class="macho-button">Vehicle Options</div>
+            <div class="macho-button">Server Settings</div>
+        </div>
+    </div>
+
+    <script>
+        // Listen for messages from MachoSendDuiMessage / SendDuiMessage
+        window.addEventListener('message', function(event) {
+            let data = event.data;
+            if (data.type === "UPDATE_TITLE") {
+                document.getElementById('title').innerText = data.title;
+            }
+        });
+    </script>
+</body>
+</html>
