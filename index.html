@@ -14,28 +14,27 @@
         body {
             width: 100vw;
             height: 100vh;
-            background: transparent; /* Game shows through transparent background */
+            background: transparent;
             font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Menu Container Dimensions & Layout */
+        /* Hide the container by default */
         .macho-container {
+            display: none; 
             width: 650px;
             height: 420px;
             background: rgba(12, 12, 18, 0.92);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 10px;
             color: #fff;
-            display: flex;
             flex-direction: column;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
             overflow: hidden;
         }
 
-        /* Banner Header */
         .macho-header {
             height: 60px;
             background: linear-gradient(135deg, #e63946 0%, #a8201a 100%);
@@ -48,7 +47,6 @@
             letter-spacing: 1px;
         }
 
-        /* Menu Content Area */
         .macho-body {
             flex: 1;
             padding: 20px;
@@ -75,7 +73,7 @@
 </head>
 <body>
 
-    <div class="macho-container">
+    <div class="macho-container" id="menu-container">
         <div class="macho-header">
             <span id="title">MACHO MENU</span>
             <span style="font-size: 12px; opacity: 0.6;">v1.0</span>
@@ -88,11 +86,26 @@
     </div>
 
     <script>
-        // Listen for messages from MachoSendDuiMessage / SendDuiMessage
         window.addEventListener('message', function(event) {
-            let data = event.data;
-            if (data.type === "UPDATE_TITLE") {
-                document.getElementById('title').innerText = data.title;
+            let item = event.data;
+            
+            // Parse JSON if it arrives as a string
+            if (typeof item === 'string') {
+                try { item = JSON.parse(item); } catch (e) {}
+            }
+
+            // Handle the toggle action sent from Lua
+            if (item.action === "toggleMenu") {
+                const container = document.getElementById('menu-container');
+                if (item.data && item.data.open) {
+                    container.style.display = 'flex';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+
+            if (item.type === "UPDATE_TITLE") {
+                document.getElementById('title').innerText = item.title;
             }
         });
     </script>
