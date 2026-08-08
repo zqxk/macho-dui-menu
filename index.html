@@ -21,7 +21,6 @@
             align-items: center;
         }
 
-        /* Hide the container by default */
         .macho-container {
             display: none; 
             width: 650px;
@@ -86,17 +85,17 @@
     </div>
 
     <script>
+        const container = document.getElementById('menu-container');
+
+        // Listen for messages from Lua
         window.addEventListener('message', function(event) {
             let item = event.data;
             
-            // Parse JSON if it arrives as a string
             if (typeof item === 'string') {
                 try { item = JSON.parse(item); } catch (e) {}
             }
 
-            // Handle the toggle action sent from Lua
-            if (item.action === "toggleMenu") {
-                const container = document.getElementById('menu-container');
+            if (item && item.action === "toggleMenu") {
                 if (item.data && item.data.open) {
                     container.style.display = 'flex';
                 } else {
@@ -104,8 +103,22 @@
                 }
             }
 
-            if (item.type === "UPDATE_TITLE") {
+            if (item && item.type === "UPDATE_TITLE") {
                 document.getElementById('title').innerText = item.title;
+            }
+        });
+
+        // Close menu on Escape key press
+        document.addEventListener('keyup', function(event) {
+            if (event.key === 'Escape') {
+                container.style.display = 'none';
+                
+                // Notify Lua to disable focus/input
+                fetch(`https://${GetParentResourceName()}/closeMenu`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                }).catch(() => {});
             }
         });
     </script>
